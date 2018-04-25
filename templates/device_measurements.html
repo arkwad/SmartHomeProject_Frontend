@@ -1,0 +1,206 @@
+
+
+<html lang="pl">
+    <head>
+        <meta http-equiv = "Content-Type" content = "text/html; charset=UTF-8">
+        <meta name = " description" content = "Site description">
+        <link rel = "stylesheet" href = {{url_for('static', filename = 'Style.css')}}>
+ 	<!-- import plugin script -->   <script src = {{url_for('static', filename = 'Chart.min.js')}}></script>
+        <title>Smart Home</title>
+    </head>
+    <body onload="draw_chart();set_prev_selects();">
+        <div class="container">
+            <header>
+                <span style="color: white;">
+                    <h1>Smart Home System</h1>
+                </span>
+            </header>
+            <div class="content">
+                <div class=" menu">
+                    <aside>
+                        <h2>Menu</h2>
+                        <nav>
+                            <ul>
+                                <li><a href="/"><span>Home page</span></a></li>
+                                <li><a href="/devices"><span>List of connected devices</span></a></li>
+                                <li><a href="/about"><span>About</span></a></li>
+                            </ul>
+                        </nav>
+                    </aside>
+                </div>
+                <div class="tekst">
+                    <section>
+                        <article>
+			    <h2> {{device_name}} measurements info:</h2>
+				<center>
+				<!-- bar chart canvas element --><canvas id="chart" width="600" height="400"></canvas>
+				<form id = "action_form" onsubmit="return load(this)" action="">
+				<fieldset>
+				Choose the measurements time frame:<br>
+				<select id="time_select">
+				  <option value="15min">Last 15 min</option>
+				  <option value="30min">Last 30 min</option>
+				  <option value="1h">Last 1 hour</option>
+				</select>
+				<br><br>
+				Choose the measured value:<br>
+				<select id="value_select">
+				  <option value="temperature">Temperature</option>
+				  <option value="humidity">Humidity</option>
+				  <option value="pressure">Pressure</option>
+				  <option value="air">Air Quality</option>
+				</select>
+				<br><br><br>
+				<input type="submit" id="load_button" value="Load Chart"">
+				</fieldset>
+				</form></center>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+	<center>&copy; 2018 Arkadiusz Wadowski</center>
+    </body>
+
+<script language="javascript" type="text/javascript">
+function load(elem) {
+	var time = document.getElementById("time_select");
+	var value = document.getElementById("value_select");
+	elem.action = "/devices/"+'{{device_name}}' + '/' + time.options[time.selectedIndex].value + '/' + value.options[value.selectedIndex].value;
+	
+	return true;
+}
+
+function set_prev_selects() {
+	var time = document.getElementById("time_select");
+	var value = document.getElementById("value_select");
+	time.value = "{{time}}";
+	value.value = "{{value}}";
+}
+
+function draw_chart() {
+    console.log("value = "+"{{value}}");
+    //console.log({{data}})
+    // bar chart data
+    var bardData;
+
+    var idx = 0;
+    if ("{{value}}" == "temperature") {
+    barData = {
+    labels : [{% for item in data %}
+                  "{{item[6]}}",
+              {% endfor %}],
+    datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [{% for record in data %}
+                      {{ record[2] }},
+                    {% endfor %}]
+      }
+      ]
+   }
+   max = 80;
+    } else if ("{{value}}" == "humidity") {
+    barData = {
+    labels : [{% for item in data %}
+                  "{{item[6]}}",
+              {% endfor %}],
+    datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [{% for record in data %}
+                      {{ record[3] }},
+                    {% endfor %}]
+      }
+      ]
+   }
+   	max = 100;
+	idx = 3;
+    } else if ("{{value}}" == "pressure") {
+    barData = {
+    labels : [{% for item in data %}
+                  "{{item[6]}}",
+              {% endfor %}],
+    datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [{% for record in data %}
+                      {{ record[4] }},
+                    {% endfor %}]
+      }
+      ]
+   }
+        idx = 4;
+   max = 1400;
+    } else if ("{{value}}" == "air") {
+    barData = {
+    labels : [{% for item in data %}
+                  "{{item[6]}}",
+              {% endfor %}],
+    datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [{% for record in data %}
+                      {{ record[2] }},
+                    {% endfor %}]
+      }
+      ]
+   }
+        idx = 5;
+   max = 500;
+    }
+ 
+    console.log(barData.labels.length);
+    Chart.defaults.global.animationSteps = 50;
+    Chart.defaults.global.tooltipYPadding = 16;
+    Chart.defaults.global.tooltipCornerRadius = 0;
+    Chart.defaults.global.tooltipTitleFontStyle = "normal";
+    Chart.defaults.global.tooltipFillColor = "rgba(0,0,0,0.8)";
+    Chart.defaults.global.animationEasing = "easeOutBounce";
+    Chart.defaults.global.responsive = false;
+    Chart.defaults.global.scaleLineColor = "black";
+    Chart.defaults.global.scaleFontSize = 16;
+
+   // get bar chart canvas
+   var mychart = document.getElementById("chart").getContext("2d");
+ 
+   steps = barData.labels.length;
+   // draw bar chart
+   var LineChartDemo = new Chart(mychart).Line(barData, {
+        scaleOverride: true,
+        scaleSteps: steps,
+        scaleStepWidth: Math.ceil(max / steps),
+        scaleStartValue: 0,
+        scaleShowVerticalLines: true,
+        scaleShowGridLines : true,
+        barShowStroke : true,
+        scaleShowLabels: true,
+        bezierCurve: false,
+ 
+   });
+}
+ 
+</script>
+</html>
+
+

@@ -1,0 +1,66 @@
+<html lang="pl">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name=" description" content="Site description">
+        <link rel="stylesheet" href = {{url_for('static', filename = 'Style.css')}}>
+        <title>Smart Home</title>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <span style="color: white;">
+                    <h1>Smart Home System</h1>
+                </span>
+            </header>
+            <div class="content">
+                <div class=" menu">
+                    <aside>
+                        <h2>Menu</h2>
+                        <nav>
+                            <ul>
+                                <li><a href="/"><span>Home page</span></a></li>
+                                <li><a href="/devices"><span>List of connected devices</span></a></li>
+                                <li><a href="/about"><span>About</span></a></li>
+                            </ul>
+                        </nav>
+                    </aside>
+                </div>
+                <div class="tekst">
+                    <section>
+                        <article>
+			    <h2> Here is the list of active devices.</h2>
+				<hr />
+				<table border = 1>
+				 <tr>
+				   <th><font color="#fff">Device name</font></th>
+				   <th><font color="#fff">Last temperature</font></th>
+				   <th><font color="#fff">Last humidity</font></th>
+				   <th><font color="#fff">Last pressure</font></th>
+				   <th><font color="#fff">Last Air Quality</font></th>
+				   <th><font color="#fff">Last activity date</font></th>
+				 </tr>
+					 {% for record in data %}
+					    <tr>
+						<td><a id={{record[1]}} href=""><font color="#fff"> {{ record[1] }} </font></a></td>
+						<script type="text/javascript">
+							document.getElementById('{{record[1]}}').href = '/devices/' + '{{record[1]}}';
+						</script>
+
+						<td><font color="#fff"> {{ record[2] }} </font></td>
+						<td><font color="#fff"> {{ record[3] }} </font></td>
+						<td><font color="#fff"> {{ record[4] }} </font></td>
+						<td><font color="#fff"> {{ record[5] }} </font></td>
+						<td><font color="#fff"> {{ record[6] }} </font></td>
+					    </tr>
+					 {% endfor %}
+				</table>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </body>
+	<center>&copy; 2018 Arkadiusz Wadowski</center>
+</html>
+
+

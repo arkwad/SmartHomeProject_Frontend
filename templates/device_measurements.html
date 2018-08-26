@@ -49,6 +49,7 @@
 				  <option value="humidity">Humidity</option>
 				  <option value="pressure">Pressure</option>
 				  <option value="air">Air Quality</option>
+				  <option value="movement_detected">Movement Detected</option>
 				</select>
 				<br><br><br>
 				<input type="submit" id="load_button" value="Load Chart"">
@@ -88,7 +89,7 @@ function draw_chart() {
     if ("{{value}}" == "temperature") {
     barData = {
     labels : [{% for item in data %}
-                  "{{item[6]}}",
+                  "{{item[7]}}",
               {% endfor %}],
     datasets : [{
             fillColor: "rgba(151,187,205,0.2)",
@@ -108,7 +109,7 @@ function draw_chart() {
     } else if ("{{value}}" == "humidity") {
     barData = {
     labels : [{% for item in data %}
-                  "{{item[6]}}",
+                  "{{item[7]}}",
               {% endfor %}],
     datasets : [{
             fillColor: "rgba(151,187,205,0.2)",
@@ -129,7 +130,7 @@ function draw_chart() {
     } else if ("{{value}}" == "pressure") {
     barData = {
     labels : [{% for item in data %}
-                  "{{item[6]}}",
+                  "{{item[7]}}",
               {% endfor %}],
     datasets : [{
             fillColor: "rgba(151,187,205,0.2)",
@@ -150,7 +151,7 @@ function draw_chart() {
     } else if ("{{value}}" == "air") {
     barData = {
     labels : [{% for item in data %}
-                  "{{item[6]}}",
+                  "{{item[7]}}",
               {% endfor %}],
     datasets : [{
             fillColor: "rgba(151,187,205,0.2)",
@@ -161,13 +162,35 @@ function draw_chart() {
             pointHighlightStroke: "rgba(151,187,205,1)",
             bezierCurve : false,
             data : [{% for record in data %}
-                      {{ record[2] }},
+                      {{ record[5] }},
                     {% endfor %}]
       }
       ]
    }
         idx = 5;
    max = 500;
+    }
+    else if ("{{value}}" == "movement_detected") {
+    barData = {
+    labels : [{% for item in data %}
+                  "{{item[7]}}",
+              {% endfor %}],
+    datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            bezierCurve : false,
+            data : [{% for record in data %}
+                      {{ record[6] }},
+                    {% endfor %}]
+      }
+      ]
+   }
+        idx = 6;
+   max = 1;
     }
  
     console.log(barData.labels.length);

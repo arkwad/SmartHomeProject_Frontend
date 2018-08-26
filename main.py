@@ -39,8 +39,8 @@ import time
 import datetime
 
 add_dev = ("INSERT INTO devices "
-           "(name, temperature, humidity, pressure, air_quality, date) "
-           "VALUES (%s, %s, %s, %s, %s, %s)")
+           "(name, temperature, humidity, pressure, air_quality, movement_detected, date) "
+           "VALUES (%s, %s, %s, %s, %s, %s, %s)")
 
 find_device_last_record = ("SELECT * FROM SmartHome.devices WHERE id IN ( SELECT MAX(id) FROM SmartHome.devices GROUP BY name ) and name = %s;")
 
@@ -76,7 +76,7 @@ def add_measurements():
 	# change format to acceptable by mysql
 	timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 	# prepare data set to be stored in database
-    	data_dev = (jdata['name'], str(jdata['temperature']), str(jdata['humidity']), str(jdata['pressure']), str(jdata['air_quality']), timestamp)
+    	data_dev = (jdata['name'], str(jdata['temperature']), str(jdata['humidity']), str(jdata['pressure']), str(jdata['air_quality']), str(jdata['movement_detected']), timestamp)
 	# execute query to add row in table    	
 	cursor.execute(add_dev, data_dev)
 	# commit changes    	

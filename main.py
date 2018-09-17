@@ -68,7 +68,7 @@ def add_measurements():
 	except ValueError:
 	    return "JSON NOK!"
 	# set up connection with database
-        cnx = mysql.connector.connect(user='root', password='toor', host='127.0.0.1', database='SmartHome')
+        cnx = mysql.connector.connect(user='arek', password='baza', host='127.0.0.1', unix_socket='/var/run/mysqld/mysqld.sock', database='SmartHome')
 	# create cursor
         cursor = cnx.cursor()
 	# get current timestamp 
@@ -98,7 +98,7 @@ def about():
 @app.route("/devices", methods=["GET"])
 def devices():
     # set up connection with database
-    cnx = mysql.connector.connect(user='root', password='toor', host='127.0.0.1', database='SmartHome')
+    cnx = mysql.connector.connect(user='arek', password='baza', host='127.0.0.1', unix_socket='/var/run/mysqld/mysqld.sock',  database='SmartHome')
     # create cursor
     cursor = cnx.cursor()
     cursor.execute(search_for_last_records)
@@ -118,7 +118,7 @@ def device_details(device_name):
 @app.route("/devices/<device_name>/<time>/<value>", methods=["GET"])
 def device_measurements_filter(device_name, time, value):
     # set up connection with database
-    cnx = mysql.connector.connect(user='root', password='toor', host='127.0.0.1', database='SmartHome')
+    cnx = mysql.connector.connect(user='arek', password='baza', host='127.0.0.1', unix_socket='/var/run/mysqld/mysqld.sock', database='SmartHome')
     # create cursor
     cursor = cnx.cursor()
 

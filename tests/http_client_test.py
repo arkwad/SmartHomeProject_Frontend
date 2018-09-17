@@ -40,11 +40,18 @@ import json
 if __name__ == "__main__":
     try:
         serverUrl = 'http://127.0.0.1:5000/measurements'
-	data  = "{\"name\":\"device9\",\"temperature\":29,\"humidity\":15,\"pressure\":1321,\"air_quality\":43}"
-	requests.post(serverUrl, data, timeout = 5)
 
-	print data
-        time.sleep(1)
+	temp = ["23", "20", "26","21", "23", "25"]
+	pressure = ["102", "1002", "999","1100", "1050", "1000"]
+	humidity = ["71", "55", "54","59", "23", "31"]
+	movement = ["false", "false", "false","true", "true", "true"]
+	air = ["64", "150", "96","111", "115", "85"]
+	for x in range(0, 9):
+		data  = "{\"name\":\"bedroom\",\"temperature\":"+temp[x]+",\"humidity\":"+humidity[x]+",\"pressure\":"+pressure[x]+",\"movement_detected\":"+movement[x]+",\"air_quality\":"+air[x]+"}"
+		requests.post(serverUrl, data, timeout = 5)
+
+		print data
+        	time.sleep(2)
 
     except KeyboardInterrupt:
         print ("Cya!")
